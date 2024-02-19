@@ -6,12 +6,80 @@
 
     <groupId>io.apicurio</groupId>
     <artifactId>kroxylicious-schema-validation</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <apicurio.registry.schema.validation>0.0.4.Final</apicurio.registry.schema.validation>
+        <kroxylicious.version>0.4.1</kroxylicious.version>
+
+        <junit.version>5.10.1</junit.version>
+        <log4j.version>2.21.1</log4j.version>
+        <mockito.version>5.7.0</mockito.version>
+        <assertj-core.version>3.24.2</assertj-core.version>
+        <mockito.version>5.7.0</mockito.version>
+        <kafka.version>3.6.0</kafka.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
     </properties>
+
+    <dependencies>
+        <!-- project dependencies - runtime and compile -->
+        <dependency>
+            <groupId>io.kroxylicious</groupId>
+            <artifactId>kroxylicious-api</artifactId>
+            <version>${kroxylicious.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- project dependencies - test -->
+        <dependency>
+            <groupId>io.kroxylicious</groupId>
+            <artifactId>kroxylicious-integration-test-support</artifactId>
+            <version>${kroxylicious.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.13</artifactId>
+            <version>${kafka.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- third party dependencies - test -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <scope>test</scope>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+            <version>${assertj-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+            <version>${mockito.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+            <version>${mockito.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
