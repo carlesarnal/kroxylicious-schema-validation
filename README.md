@@ -10,6 +10,6 @@ python3 talk/demo.py
 
 Fresh integration check passed: valid, invalid, mixed batch, bypass, registry outage and recovery; broker contents asserted. The ephemeral Registry schema was restored after restart before retrying. No performance benchmark.
 
-Start with [PRESENTATION_GUIDE.md](PRESENTATION_GUIDE.md), open `presentation.html`, and inspect [EVIDENCE.md](EVIDENCE.md) and [VERIFICATION.md](VERIFICATION.md). The prior repository overview is retained in `docs/historical-readme.md` as historical context, not a verified recipe for this talk.
+Start with [PRESENTATION_GUIDE.md](PRESENTATION_GUIDE.md), open `presentation.html`, and inspect [EVIDENCE.md](EVIDENCE.md) and [VERIFICATION.md](VERIFICATION.md). The obsolete custom-filter scaffold was removed; this implementation uses the released proxy.
 
 The executable material and documentation distinguish observed behavior from design guidance. License: Apache-2.0.
