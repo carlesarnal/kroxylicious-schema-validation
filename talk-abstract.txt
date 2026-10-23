@@ -1,0 +1,12 @@
+Title: Validate Before Kafka: What Happens When a Proxy Enforces Your Schemas
+
+A valid order is rejected. The producer sees the same exception type it would receive for malformed data, but the schema registry is unavailable. Should it retry, repair the record, or stop? Moving schema validation into a Kafka proxy changes more than where bad data is caught: it changes the producer's failure contract.
+
+Drawing on my contribution to Kroxylicious's Avro and Protobuf validation support, this session examines that contract through a reproducible JSON Schema example with Apicurio Registry. We follow an order from producer to broker, then compare a schema-invalid record, a mixed batch, a registry outage and a direct-to-broker bypass.
+
+In the tested Kroxylicious 0.24.0 setup, one invalid record rejects its mixed batch, the outage rejects valid data, and bypassing the proxy stores an invalid record. These observations become a failure matrix connecting client errors to broker contents and recovery choices. We examine the ordering and duplicate-handling questions behind resending valid records, and the network and authorization controls needed to make the proxy an enforcement point.
+
+Attendees will leave with:
+- A failure matrix for schema errors, batch rejection, bypass routes and registry outages
+- An error-handling decision tree using constraint details and SCHEMA_RESOLUTION_ERROR, not exception type alone
+- Criteria for choosing client-side validation, proxy enforcement, or both

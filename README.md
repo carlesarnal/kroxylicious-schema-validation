@@ -1,32 +1,15 @@
-# Kroxylicious WASM Filter Sample
+# Validate Before Kafka: What Happens When a Proxy Enforces Your Schemas
 
-This sample filter project provides an example usage of [custom filters](https://kroxylicious.io/kroxylicious/#_custom_filters) in Kroxylicious.
-Here we leverage the Apicurio Registry schema validation libraries [Apicurio Registry](https://github.com/Apicurio/apicurio-registry-schema-validation) to validate the schema being used.
+The local test uses Kroxylicious 0.24.0, Apicurio Registry 3.3.3 and Kafka 3.9.1. A valid JSON order reaches the broker. A negative amount is rejected, as is the valid record sharing its batch. The script then reads the topic: success is a broker observation, not merely an absence of console errors.
 
-To learn more about Kroxylicious, visit the [docs](https://kroxylicious.io/kroxylicious).
-To learn more about Apicurio Registry, visit the [docs](https://www.apicur.io/registry/docs/apicurio-registry/2.5.x/index.html).
+## Current talk entry point
 
-## Getting started
-
-### Build
-Building the sample project is easy!
-```shell
-mvn verify
+```sh
+python3 talk/demo.py
 ```
-### Configure
-Filters can be added and removed by altering the `filters` list in the `sample-proxy-config.yml` file. You can also reconfigure the sample filters by changing the configuration values in this file.
-The **SampleFetchResponseFilter** and **SampleProduceRequestFilter** each have two configuration values that must be specified for them to work:
 
-#### Default Configuration
-The default configuration for **SampleProduceRequestFilter** is:
-```yaml
-filters:
-  - type: SampleProduceRequestFilterFactory
-    config:
-```
-The default configuration for **SampleFetchResponseFilter** is:
-```yaml
-filters:
-  - type: SampleFetchResponseFilterFactory
-    config:
-```
+Fresh integration check passed: valid, invalid, mixed batch, bypass, registry outage and recovery; broker contents asserted. The ephemeral Registry schema was restored after restart before retrying. No performance benchmark.
+
+Start with [PRESENTATION_GUIDE.md](PRESENTATION_GUIDE.md), open `presentation.html`, and inspect [EVIDENCE.md](EVIDENCE.md) and [VERIFICATION.md](VERIFICATION.md). The prior repository overview is retained in `docs/historical-readme.md` as historical context, not a verified recipe for this talk.
+
+The executable material and documentation distinguish observed behavior from design guidance. License: Apache-2.0.

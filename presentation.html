@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validate Before Kafka: What Happens When a Proxy Enforces Your Schemas</title>
+<style>body{margin:0;background:#f5f3ef;color:#242424;font:clamp(18px,2.1vw,28px) system-ui}section{display:none;box-sizing:border-box;min-height:100vh;padding:6vw}section.active{display:block}h1{font-size:clamp(28px,4vw,54px);max-width:1000px}p,li{max-width:1100px;line-height:1.5}small{color:#80502e}nav{position:fixed;bottom:12px;right:20px}button{font-size:18px;padding:8px}.notes{display:none;background:#e2efea;padding:20px}body.notes-on .notes{display:block}@media print{section{display:block;break-after:page;min-height:90vh}nav,.notes{display:none!important}}</style>
+<body>
+<section id="slide-1" class="active">
+<small>1 / 7</small>
+<h1>The question</h1>
+<p>Validate Before Kafka: What Happens When a Proxy Enforces Your Schemas</p>
+<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+</section>
+<section id="slide-2" class="">
+<small>2 / 7</small>
+<h1>The error class is not the diagnosis</h1>
+<p>The local test uses Kroxylicious 0.24.0, Apicurio Registry 3.3.3 and Kafka 3.9.1. A valid JSON order reaches the broker. A negative amount is rejected, as is the valid record sharing its batch. The script then reads the topic: success is a broker observation, not merely an absence of console errors.</p>
+<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+</section>
+<section id="slide-3" class="">
+<small>3 / 7</small>
+<h1>A schema registry becomes part of the write path</h1>
+<p>Stopping Registry causes a valid record to be rejected with SCHEMA_RESOLUTION_ERROR inside InvalidRecordException. Treating that exception as proof of bad input would send a valid business event down the wrong recovery path. Inspect the constraint or resolution context and the dependency before deciding whether to repair, quarantine or retry.</p>
+<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+</section>
+<section id="slide-4" class="">
+<small>4 / 7</small>
+<h1>The recovery test found another boundary</h1>
+<p>Our demonstration Registry uses ephemeral storage. Restarting its container restored HTTP availability but not the registered schema. The first recovery assertion failed with ContentNotFoundException. The corrected lab re-registers the schema and verifies its content ID before retrying. This is a laboratory restoration step, not a substitute for production Registry persistence and backup.</p>
+<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+</section>
+<section id="slide-5" class="">
+<small>5 / 7</small>
+<h1>Enforcement and delivery are separate decisions</h1>
+<p>An invalid event sent directly to the broker bypasses the filter. Deployment controls must enforce the proxy path. Likewise, a rejected mixed batch does not give an application a universal selective-resend algorithm: preserve its ordering and duplicate-handling requirements. My merged Avro/Protobuf contribution explains the implementation background; this particular lab exercises JSON Schema.</p>
+<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+</section>
+<section id="slide-6" class="">
+<small>6 / 7</small>
+<h1>Verification boundary</h1>
+<p>Fresh integration check passed: valid, invalid, mixed batch, bypass, registry outage and recovery; broker contents asserted. The ephemeral Registry schema was restored after restart before retrying. No performance benchmark.</p>
+<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+</section>
+<section id="slide-7" class="">
+<small>7 / 7</small>
+<h1>Takeaways</h1>
+<p>- A failure matrix for schema errors, batch rejection, bypass routes and registry outages<br>- An error-handling decision tree using constraint details and SCHEMA_RESOLUTION_ERROR, not exception type alone<br>- Criteria for choosing client-side validation, proxy enforcement, or both</p>
+<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+</section>
+<nav>
+<button id="prev" aria-label="Previous slide">←</button> <button id="next" aria-label="Next slide">→</button>
+</nav>
+<script>let n=0;const s=[...document.querySelectorAll('section')];function show(i){n=Math.max(0,Math.min(s.length-1,i));s.forEach((x,j)=>x.classList.toggle('active',j===n));history.replaceState(null,'','#slide-'+(n+1));}function fromHash(){const m=location.hash.match(/^#slide-(\d+)$/);if(m)show(Number(m[1])-1);}document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(n+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(n-1)}if(e.key==='Home')show(0);if(e.key==='End')show(s.length-1);if(e.key.toLowerCase()==='n')document.body.classList.toggle('notes-on');if(e.key.toLowerCase()==='f')document.documentElement.requestFullscreen?.();});document.querySelector('#prev').onclick=()=>show(n-1);document.querySelector('#next').onclick=()=>show(n+1);window.addEventListener('hashchange',fromHash);fromHash();</script>
+</body>
+</html>

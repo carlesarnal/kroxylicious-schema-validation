@@ -1,0 +1,20 @@
+virtualClusters:
+  - name: demo
+    targetCluster:
+      bootstrapServers: kafka:9092
+    gateways:
+      - name: default
+        portIdentifiesNode:
+          bootstrapAddress: kroxylicious:9192
+filterDefinitions:
+  - name: order-validation
+    type: RecordValidation
+    config:
+      rules:
+        - topicNames: [orders]
+          valueRule:
+            schemaValidationConfig:
+              apicurioRegistryUrl: http://registry:8080
+              apicurioId: __ID__
+              schemaType: JSON_SCHEMA
+defaultFilters: [order-validation]

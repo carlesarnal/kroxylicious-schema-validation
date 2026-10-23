@@ -1,0 +1,20 @@
+name: Released proxy talk checks
+on:
+  push:
+    paths: ['talk/**', '.github/workflows/talk-check.yml']
+  pull_request:
+    paths: ['talk/**', '.github/workflows/talk-check.yml']
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python3 talk/demo.py
+      - if: always()
+        run: docker compose -p proxy-talk -f talk/compose.yaml --profile proxy down -v
