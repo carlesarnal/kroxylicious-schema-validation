@@ -9,43 +9,43 @@
 <small>1 / 7</small>
 <h1>The question</h1>
 <p>Validate Before Kafka: What Happens When a Proxy Enforces Your Schemas</p>
-<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+<aside class="notes">Speaker reference: PRESENTATION_GUIDE.md. Runtime versions and observed results: VERIFICATION.md.</aside>
 </section>
 <section id="slide-2" class="">
 <small>2 / 7</small>
 <h1>The error class is not the diagnosis</h1>
 <p>The local test uses Kroxylicious 0.24.0, Apicurio Registry 3.3.3 and Kafka 3.9.1. A valid JSON order reaches the broker. A negative amount is rejected, as is the valid record sharing its batch. The script then reads the topic: success is a broker observation, not merely an absence of console errors.</p>
-<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+<aside class="notes">Speaker reference: PRESENTATION_GUIDE.md. Runtime versions and observed results: VERIFICATION.md.</aside>
 </section>
 <section id="slide-3" class="">
 <small>3 / 7</small>
 <h1>A schema registry becomes part of the write path</h1>
 <p>Stopping Registry causes a valid record to be rejected with SCHEMA_RESOLUTION_ERROR inside InvalidRecordException. Treating that exception as proof of bad input would send a valid business event down the wrong recovery path. Inspect the constraint or resolution context and the dependency before deciding whether to repair, quarantine or retry.</p>
-<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+<aside class="notes">Speaker reference: PRESENTATION_GUIDE.md. Runtime versions and observed results: VERIFICATION.md.</aside>
 </section>
 <section id="slide-4" class="">
 <small>4 / 7</small>
 <h1>The recovery test found another boundary</h1>
 <p>Our demonstration Registry uses ephemeral storage. Restarting its container restored HTTP availability but not the registered schema. The first recovery assertion failed with ContentNotFoundException. The corrected lab re-registers the schema and verifies its content ID before retrying. This is a laboratory restoration step, not a substitute for production Registry persistence and backup.</p>
-<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+<aside class="notes">Speaker reference: PRESENTATION_GUIDE.md. Runtime versions and observed results: VERIFICATION.md.</aside>
 </section>
 <section id="slide-5" class="">
 <small>5 / 7</small>
 <h1>Enforcement and delivery are separate decisions</h1>
 <p>An invalid event sent directly to the broker bypasses the filter. Deployment controls must enforce the proxy path. Likewise, a rejected mixed batch does not give an application a universal selective-resend algorithm: preserve its ordering and duplicate-handling requirements. My merged Avro/Protobuf contribution explains the implementation background; this particular lab exercises JSON Schema.</p>
-<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+<aside class="notes">Speaker reference: PRESENTATION_GUIDE.md. Runtime versions and observed results: VERIFICATION.md.</aside>
 </section>
 <section id="slide-6" class="">
 <small>6 / 7</small>
 <h1>Verification boundary</h1>
 <p>Fresh integration check passed: valid, invalid, mixed batch, bypass, registry outage and recovery; broker contents asserted. The ephemeral Registry schema was restored after restart before retrying. No performance benchmark.</p>
-<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+<aside class="notes">Speaker reference: PRESENTATION_GUIDE.md. Runtime versions and observed results: VERIFICATION.md.</aside>
 </section>
 <section id="slide-7" class="">
 <small>7 / 7</small>
 <h1>Takeaways</h1>
 <p>- A failure matrix for schema errors, batch rejection, bypass routes and registry outages<br>- An error-handling decision tree using constraint details and SCHEMA_RESOLUTION_ERROR, not exception type alone<br>- Criteria for choosing client-side validation, proxy enforcement, or both</p>
-<aside class="notes">Explain the evidence, then its boundary. Use the corresponding section in PRESENTATION_GUIDE.md.</aside>
+<aside class="notes">Speaker reference: PRESENTATION_GUIDE.md. Runtime versions and observed results: VERIFICATION.md.</aside>
 </section>
 <nav>
 <button id="prev" aria-label="Previous slide">←</button> <button id="next" aria-label="Next slide">→</button>

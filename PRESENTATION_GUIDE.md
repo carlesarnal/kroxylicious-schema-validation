@@ -10,33 +10,33 @@ The local test uses Kroxylicious 0.24.0, Apicurio Registry 3.3.3 and Kafka 3.9.1
 
 ### 0:00 — Follow the order into Kafka
 
-Say: The local test uses Kroxylicious 0.24.0, Apicurio Registry 3.3.3 and Kafka 3.9.1. A valid JSON order reaches the broker. A negative amount is rejected, as is the valid record sharing its batch. The script then reads the topic: success is a broker observation, not merely an absence of console errors.
+The local test uses Kroxylicious 0.24.0, Apicurio Registry 3.3.3 and Kafka 3.9.1. A valid JSON order reaches the broker. A negative amount is rejected, as is the valid record sharing its batch. The script then reads the topic: success is a broker observation, not merely an absence of console errors.
 
-Show the corresponding diagram, source record or actual command output. Pause to identify the observation that supports the claim.
+Run talk/demo.py and compare validation errors with records read directly from the broker.
 
-### 4:00 — One invalid record rejects its batch
+### 4:00 — Registry failure is not malformed input
 
-Say: Stopping Registry causes a valid record to be rejected with SCHEMA_RESOLUTION_ERROR inside InvalidRecordException. Treating that exception as proof of bad input would send a valid business event down the wrong recovery path. Inspect the constraint or resolution context and the dependency before deciding whether to repair, quarantine or retry.
+Stopping Registry causes a valid record to be rejected with SCHEMA_RESOLUTION_ERROR inside InvalidRecordException. Treating that exception as proof of bad input would send a valid business event down the wrong recovery path. Inspect the constraint or resolution context and the dependency before deciding whether to repair, quarantine or retry.
 
-Show the corresponding diagram, source record or actual command output. Pause to identify the observation that supports the claim.
+Locate SCHEMA_RESOLUTION_ERROR in the producer output after Registry stops.
 
-### 9:00 — Registry failure is not malformed input
+### 9:00 — Restore the schema before retrying
 
-Say: Our demonstration Registry uses ephemeral storage. Restarting its container restored HTTP availability but not the registered schema. The first recovery assertion failed with ContentNotFoundException. The corrected lab re-registers the schema and verifies its content ID before retrying. This is a laboratory restoration step, not a substitute for production Registry persistence and backup.
+Our demonstration Registry uses ephemeral storage. Restarting its container restored HTTP availability but not the registered schema. The first recovery assertion failed with ContentNotFoundException. The corrected lab re-registers the schema and verifies its content ID before retrying. This is a laboratory restoration step, not a substitute for production Registry persistence and backup.
 
-Show the corresponding diagram, source record or actual command output. Pause to identify the observation that supports the claim.
+Show schema restoration and the content-ID check before sending the recovery record.
 
-### 15:00 — Restore the dependency before retry
+### 15:00 — Batch semantics and bypass routes
 
-Say: An invalid event sent directly to the broker bypasses the filter. Deployment controls must enforce the proxy path. Likewise, a rejected mixed batch does not give an application a universal selective-resend algorithm: preserve its ordering and duplicate-handling requirements. My merged Avro/Protobuf contribution explains the implementation background; this particular lab exercises JSON Schema.
+An invalid event sent directly to the broker bypasses the filter. Deployment controls must enforce the proxy path. Likewise, a rejected mixed batch does not give an application a universal selective-resend algorithm: preserve its ordering and duplicate-handling requirements. My merged Avro/Protobuf contribution explains the implementation background; this particular lab exercises JSON Schema.
 
-Show the corresponding diagram, source record or actual command output. Pause to identify the observation that supports the claim.
+Compare the bypassed invalid record with the rejected mixed batch.
 
-### 21:00 — Enforce the network path
+### 21:00 — Choose the appropriate recovery action
 
-Say: Use the evidence boundary to choose the next action.
+Summarize the decision the example supports and the assumptions behind it.
 
-Show the corresponding diagram, source record or actual command output. Pause to identify the observation that supports the claim.
+Use failure-matrix.txt to choose input repair, dependency recovery or routing correction.
 
 ### 26:00 — Questions and buffer
 
